@@ -442,22 +442,22 @@ class Spreking extends Plugin
 	 */
 	public function theme_reply_form( $theme, $thread, $forum )
 	{
-		if( !self::has_permission('reply', $thread) )
-		{
+		if( !self::has_permission('reply', $thread) ) {
 			return _t('<p>You are not authorized to reply to this thread.</p>');
 		}
 		
 		// Create the form
 		$form = new FormUI( 'create-reply' );
 		
-		$form->append('textarea', 'content', 'null:null', _t('Message'));
+		$content = FormControlTextarea::create('content', 'null:null')->label('Message');
+		$form->append( $content );
 		$form->content->class[] = 'resizable';
 		$form->content->tabindex = 1;
 		$form->content->raw = true;
 		
-		if( self::$anonymity )
-		{
-			$form->append( 'checkbox', 'anonymous', 'null:null', _t('Keep this reply anonymous') );
+		if( self::$anonymity ) {
+			$anon = FormControlCheckbox::create('anonymous', 'null:null')->label('Keep this reply anonymous');
+			$form->append( $anon );
 		}
 		
 		$form->append('hidden', 'thread', 'null:null' );
